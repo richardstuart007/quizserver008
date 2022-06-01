@@ -10,7 +10,6 @@ const { format } = require('date-fns')
 //  Sub components
 //
 const s_Raw = require('./controllers/s_Raw')
-const s_Key1 = require('./controllers/s_Key1')
 const s_Register = require('./controllers/s_Register')
 const s_Signin = require('./controllers/s_Signin')
 const s_Profile = require('./controllers/s_Profile')
@@ -32,7 +31,7 @@ const {
   KNEX_PWD,
   KNEX_DATABASE,
   URL_SIGNIN,
-  URL_QUESTIONS,
+  URL_TABLES,
   URL_REGISTER,
   URL_PROFILE
 } = require('./quizServerConstants.js')
@@ -55,15 +54,15 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 //.............................................................................
-//.  Routes - Questions
+//.  Routes - Tables
 //.............................................................................
-app.post(URL_QUESTIONS, (req, res) => {
-  logRawQuestions(req, 'POST', 'RAW')
+app.post(URL_TABLES, (req, res) => {
+  logRawTables(req, 'POST', 'RAW')
   s_Raw.handleRaw(req, res, db)
 })
 
-app.delete(URL_QUESTIONS, (req, res) => {
-  logRawQuestions(req, 'DELETE', 'RAW')
+app.delete(URL_TABLES, (req, res) => {
+  logRawTables(req, 'DELETE', 'RAW')
   s_Raw.handleRaw(req, res, db)
 })
 //.............................................................................
@@ -92,7 +91,7 @@ app.listen(PORT, () => {
 //.............................................................................
 //.  Log the Body to the console
 //.............................................................................
-function logRawQuestions(req, fetchAction, fetchRoute) {
+function logRawTables(req, fetchAction, fetchRoute) {
   //
   //  Destructure Parameters
   //
@@ -102,6 +101,7 @@ function logRawQuestions(req, fetchAction, fetchRoute) {
     sqlString,
     sqlTable,
     sqlWhere,
+    sqlOrderByRaw,
     sqlRow,
     sqlKeyName
   } = req.body
@@ -117,6 +117,8 @@ function logRawQuestions(req, fetchAction, fetchRoute) {
   if (sqlTable) logMessage = logMessage + ` sqlTable(${sqlTable}) `
   if (sqlString) logMessage = logMessage + ` sqlString(${sqlString}) `
   if (sqlWhere) logMessage = logMessage + ` sqlWhere(${sqlWhere}) `
+  if (sqlOrderByRaw)
+    logMessage = logMessage + ` sqlOrderByRaw(${sqlOrderByRaw}) `
   if (sqlRow) logMessage = logMessage + ` sqlRow(Data) `
   if (sqlKeyName) logMessage = logMessage + ` sqlKeyName(${sqlKeyName}) `
 

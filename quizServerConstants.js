@@ -10,7 +10,7 @@ exports.KNEX_DATABASE = 'Quiz008'
 //  Port & URL
 //
 exports.PORT = 10008
-exports.URL_QUESTIONS = '/QuizQuestions'
+exports.URL_TABLES = '/QuizTables'
 exports.URL_REGISTER = '/QuizRegister'
 exports.URL_SIGNIN = '/QuizSignin'
 exports.URL_PROFILE = '/QuizProfile'

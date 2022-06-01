@@ -41,8 +41,15 @@ async function f_handleRaw(db, bodyParms) {
     //
     //  Destructure Parameters
     //
-    const { sqlAction, sqlString, sqlTable, sqlWhere, sqlRow, sqlKeyName } =
-      bodyParms
+    const {
+      sqlAction,
+      sqlString,
+      sqlTable,
+      sqlWhere,
+      sqlOrderByRaw,
+      sqlRow,
+      sqlKeyName
+    } = bodyParms
     if (log)
       console.log(`${reference} - sqlAction ${sqlAction} sqlRow ${sqlRow} `)
     //
@@ -94,6 +101,7 @@ async function f_handleRaw(db, bodyParms) {
       sqlString,
       sqlTable,
       sqlWhere,
+      sqlOrderByRaw,
       sqlRow,
       sqlKeyName
     )
@@ -134,6 +142,7 @@ async function f_handleRawAwait(
   sqlString,
   sqlTable,
   sqlWhere,
+  sqlOrderByRaw,
   sqlRow,
   sqlKeyName
 ) {
@@ -149,7 +158,15 @@ async function f_handleRawAwait(
         ResultSql = await db.select(db.raw(sqlString))
         break
       case 'SELECT':
-        ResultSql = await db.select('*').from(sqlTable).whereRaw(sqlWhere)
+        if (sqlOrderByRaw) {
+          ResultSql = await db
+            .select('*')
+            .from(sqlTable)
+            .whereRaw(sqlWhere)
+            .orderByRaw(sqlOrderByRaw)
+        } else {
+          ResultSql = await db.select('*').from(sqlTable).whereRaw(sqlWhere)
+        }
         break
       case 'UPDATE':
         ResultSql = await db
